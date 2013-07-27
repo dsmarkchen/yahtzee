@@ -67,54 +67,44 @@ public class Yahtzee
     }
     private int pair_score(int[] scores)
     {
-        int[] cnt = new int [6] {0,0,0,0,0,0};
-
-
-        for(int j=0;j<6;j++) {
-            for(int i=0;i<5;i++) {
-                if((j+1)==scores[i]) cnt[j]++;
-            }
-
-        }
+        int[] cnt;
+        build_counter(scores, out cnt);
         int r = 0;
         for(int j=0;j<6;j++) {
             if(cnt[j] == 2)  r=(j+1)*2;
         }
         return r;
     }
+
+    /// k pair counter
+    /// r scored number
+    private void update_pair(int[] cnt, int j, ref int k, ref int r) 
+    {
+        if(cnt[j] != 2) return;
+
+        k++;  
+        r += (j+1)*2;
+    }
     private int twopair_score(int[] scores)
     {
-        int[] cnt = new int [6] {0,0,0,0,0,0};
+
+        int[] cnt;
+        build_counter(scores, out cnt);
 
 
-        for(int j=0;j<6;j++) {
-            for(int i=0;i<5;i++) {
-                if((j+1)==scores[i]) cnt[j]++;
-            }
-
-        }
         int r = 0;
         int k = 0;
         for(int j=0;j<6;j++) {
-            if(cnt[j] == 2) { 
-                k++;
-                r+=(j+1)*2;
-            }
+            update_pair(cnt, j, ref k, ref r);
         }
         if(k!=2) return 0;
         return r;
     }
     private int three_score(int[] scores)
     {
-        int[] cnt = new int [6] {0,0,0,0,0,0};
+        int[] cnt;
+        build_counter(scores, out cnt);
 
-
-        for(int j=0;j<6;j++) {
-            for(int i=0;i<5;i++) {
-                if((j+1)==scores[i]) cnt[j]++;
-            }
-
-        }
         int r = 0;
         for(int j=0;j<6;j++) {
             if(cnt[j] == 3)  r=(j+1)*3;
@@ -123,8 +113,18 @@ public class Yahtzee
     }
     private int four_score(int[] scores)
     {
-        int[] cnt = new int [6] {0,0,0,0,0,0};
+        int[] cnt;
 
+        build_counter(scores, out cnt);
+        int r = 0;
+        for(int j=0;j<6;j++) {
+            if(cnt[j] == 4)  r=(j+1)*4;
+        }
+        return r;
+    }
+
+    private void build_counter(int[] scores, out int[] cnt) {
+        cnt = new int [6] {0,0,0,0,0,0};
 
         for(int j=0;j<6;j++) {
             for(int i=0;i<5;i++) {
@@ -132,13 +132,7 @@ public class Yahtzee
             }
 
         }
-        int r = 0;
-        for(int j=0;j<6;j++) {
-            if(cnt[j] == 4)  r=(j+1)*4;
-        }
-        return r;
-    }
-    
+    } 
     public int score(int[] scores, byte score_type = SCORE_T_CHANCE, int x0 = 1) 
     {
         int yahtzees = yahtzee_score(scores);
