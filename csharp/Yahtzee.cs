@@ -23,6 +23,7 @@ public class Yahtzee
 {
     Random rand;
 
+    public const uint DICE_TOTAL = 5;
     public const byte SCORE_T_CHANCE = 0; 
     public const byte SCORE_T_YAHTZEE = 1; 
     public const byte SCORE_T_ONES = 2; 
@@ -36,14 +37,14 @@ public class Yahtzee
     private Dice[] dice = null;
     public Yahtzee() {
         rand = new Random();
-        dice = new Dice[5];
-        for(int i=0;i<5;i++) {
+        dice = new Dice[DICE_TOTAL];
+        for(int i=0;i<DICE_TOTAL;i++) {
             dice[i] = new Dice(rand);
         }
     }
     public  void play(out int[] scores){
-        scores = new int[5];
-        for(int i=0;i<5;i++)
+        scores = new int[DICE_TOTAL];
+        for(int i=0;i<DICE_TOTAL;i++)
             scores[i] = dice[i].Roll();
     }
 
@@ -60,7 +61,7 @@ public class Yahtzee
     private int ones_score(int[] scores, int x0)
     {
         int j=0;
-        for(int i=0;i<5;i++) 
+        for(int i=0;i<DICE_TOTAL;i++) 
             if(x0==scores[i]) j++;
         return j*x0;
     }
@@ -137,17 +138,18 @@ public class Yahtzee
         }
         return r;
     }
-        public int score(int[] scores, byte score_type = SCORE_T_CHANCE, int x0 = 1) 
+    
+    public int score(int[] scores, byte score_type = SCORE_T_CHANCE, int x0 = 1) 
     {
         int yahtzees = yahtzee_score(scores);
         if(score_type == SCORE_T_YAHTZEE) return yahtzees;
-        
+
         int ones = ones_score(scores, x0);
         if(score_type == SCORE_T_ONES) return ones;
-        
+
         int pair = pair_score(scores);
         if(score_type == SCORE_T_PAIR) return pair;
-    
+
         int pairs = twopair_score(scores);
         if(score_type == SCORE_T_TWOPAIR) return pairs;
 
@@ -160,11 +162,11 @@ public class Yahtzee
         int fullhouse = 0;
         if(pair != 0 && three_sum !=0) {
             fullhouse = pair + three_sum;
-         }     
-         if(score_type == SCORE_T_FULLHOUSE) return fullhouse; 
-           
-          int sum = 0;
-        for(int i=0;i<5;i++)
+        }     
+        if(score_type == SCORE_T_FULLHOUSE) return fullhouse; 
+
+        int sum = 0;
+        for(int i=0;i<DICE_TOTAL;i++)
             sum += scores[i];
         return sum;
 
