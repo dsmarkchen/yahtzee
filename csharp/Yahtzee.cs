@@ -31,8 +31,9 @@ public class Yahtzee
     public const byte SCORE_T_TWOPAIR = 4; 
     public const byte SCORE_T_THREE = 5; 
     public const byte SCORE_T_FOUR = 6;
-    public const byte SCORE_T_STRAIGHT = 7;
-    public const byte SCORE_T_FULLHOUSE = 8;
+    public const byte SCORE_T_SMALL_STRAIGHT = 7;
+    public const byte SCORE_T_LARGE_STRAIGHT = 8;
+    public const byte SCORE_T_FULLHOUSE = 9;
 
     private Dice[] dice = null;
     public Yahtzee() {
@@ -132,7 +133,45 @@ public class Yahtzee
             }
 
         }
+    }
+
+    private bool check_small_straight(int[] cnt) {
+        if((cnt[0]==cnt[1]) && (cnt[0] == cnt[2]) && 
+            (cnt[0]==cnt[3]) && (cnt[0]==cnt[4]) && 
+                (cnt[0]==1) && cnt[5] == 0) 
+            return true;
+        return false;
+
     } 
+    private int small_score(int[] scores) 
+    {
+
+        int[] cnt;
+        build_counter(scores, out cnt);
+        if(check_small_straight(cnt)) return 15;
+
+        return 0;
+    }       
+    private int large_score(int[] scores) 
+    {
+
+        int[] cnt;
+        build_counter(scores, out cnt);
+        if(check_large_straight(cnt)) return 20;
+
+        return 0;
+    }       
+ 
+ 
+    private bool check_large_straight(int [] cnt) {
+
+        bool r = false;
+        if((cnt[5]==cnt[1]) && (cnt[5] == cnt[2]) && (cnt[5]==cnt[3]) &&
+                (cnt[5]==cnt[4]) && (cnt[5]==1) && cnt[0] == 0) r = true;
+
+        return r;
+
+    }
     public int score(int[] scores, byte score_type = SCORE_T_CHANCE, int x0 = 1) 
     {
         int yahtzees = yahtzee_score(scores);
@@ -159,10 +198,16 @@ public class Yahtzee
         }     
         if(score_type == SCORE_T_FULLHOUSE) return fullhouse; 
 
-        int sum = 0;
+
+        int small_straight_sum = small_score(scores);
+        if(score_type == SCORE_T_SMALL_STRAIGHT) return small_straight_sum;
+
+        int large_straight_sum = large_score(scores);
+        if(score_type == SCORE_T_LARGE_STRAIGHT) return large_straight_sum;
+        int sums = 0;
         for(int i=0;i<DICE_TOTAL;i++)
-            sum += scores[i];
-        return sum;
+            sums += scores[i];
+        return sums;
 
     }
 }

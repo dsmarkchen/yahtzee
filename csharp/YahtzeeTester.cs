@@ -234,7 +234,25 @@ public class YahtzeeTester
 
         int[] scores = { 1, 2, 3, 4, 5 };
         Yahtzee o = new Yahtzee();
-        int n = o.score(scores, Yahtzee.SCORE_T_STRAIGHT);
+        int n = o.score(scores, Yahtzee.SCORE_T_SMALL_STRAIGHT);
+        Assert.AreEqual(15, n);
+    }
+    [Test]
+    public void Yahtzee_smallstraight_1_2_2_4_5_score_0()
+    {
+
+        int[] scores = { 1, 2, 2, 4, 5 };
+        Yahtzee o = new Yahtzee();
+        int n = o.score(scores, Yahtzee.SCORE_T_SMALL_STRAIGHT);
+        Assert.AreEqual(0, n);
+    }
+    [Test]
+    public void Yahtzee_smallstraight_2_3_4_5_1_score_15()
+    {
+
+        int[] scores = { 2, 3, 4, 5,1 };
+        Yahtzee o = new Yahtzee();
+        int n = o.score(scores, Yahtzee.SCORE_T_SMALL_STRAIGHT);
         Assert.AreEqual(15, n);
     }
     [Test]
@@ -243,10 +261,19 @@ public class YahtzeeTester
 
         int[] scores = { 2, 3, 4, 5, 6 };
         Yahtzee o = new Yahtzee();
-        int n = o.score(scores, Yahtzee.SCORE_T_STRAIGHT);
+        int n = o.score(scores, Yahtzee.SCORE_T_LARGE_STRAIGHT);
         Assert.AreEqual(20, n);
     }
     [Test]
+    public void Yahtzee_invalid_largestraight_score_0()
+    {
+
+        int[] scores = { 1, 2, 2, 4, 5};
+        Yahtzee o = new Yahtzee();
+        int n = o.score(scores, Yahtzee.SCORE_T_LARGE_STRAIGHT);
+        Assert.AreEqual(0, n);
+    }
+     [Test]
     public void Yahtzee_fullhouse_1_1_2_2_2_score_8()
     {
 
